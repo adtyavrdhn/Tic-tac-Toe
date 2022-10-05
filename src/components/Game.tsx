@@ -5,6 +5,7 @@ function Game() {
   const [turn, setTurn] = useState("x");
   const [cells, setCells] = useState(Array(9).fill(""));
   const [winner, setWinner] = useState("");
+  const [turnNo, setTurnNo] = useState(1);
 
   function checkForWinner(squares: any) {
     let combos: any = {
@@ -41,6 +42,10 @@ function Game() {
         }
       });
     }
+
+    if (turnNo === 9 && winner === "") {
+      setWinner("tie");
+    }
   }
   function handleClick(num: any) {
     if (cells[num] !== "") {
@@ -51,9 +56,11 @@ function Game() {
     if (turn === "x") {
       squares[num] = "x";
       setTurn("o");
+      setTurnNo((turnNo) => turnNo + 1);
     } else if (turn === "o") {
       squares[num] = "o";
       setTurn("x");
+      setTurnNo((turnNo) => turnNo + 1);
     }
 
     setCells(squares);
@@ -63,6 +70,8 @@ function Game() {
   function handleRestart() {
     setWinner("");
     setCells(Array(9).fill(""));
+    setTurn("x");
+    setTurnNo(1);
   }
 
   const Cell = ({ num }: any) => {
@@ -102,7 +111,12 @@ function Game() {
       <div className="flex justify-center flex-col items-center mt-5">
         {winner && (
           <>
-            <p>{winner} is the winner!</p>
+            {winner === "tie" ? (
+              <p>Game Tied</p>
+            ) : (
+              <p>{winner} is the winner!</p>
+            )}
+
             <button
               className="self-center inline-block px-2 py-2.5 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-gradient-to-br focus:ring-2 dark:focus:ring-pink-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
               onClick={() => handleRestart()}
