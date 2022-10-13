@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import "tailwindcss/tailwind.css";
+import { randomIntFromInterval } from "../utility/utility";
 
 function Game() {
   const [turn, setTurn] = useState("x");
   const [cells, setCells] = useState(Array(9).fill(""));
   const [winner, setWinner] = useState("");
   const [turnNo, setTurnNo] = useState(1);
+  const [player, setPlayer] = useState("human");
 
   function checkForWinner(squares: any) {
     let combos: any = {
@@ -47,7 +49,8 @@ function Game() {
       setWinner("tie");
     }
   }
-  function handleClick(num: any) {
+
+  function makeMove(num: number) {
     if (cells[num] !== "") {
       alert("already clicked");
       return;
@@ -62,9 +65,14 @@ function Game() {
       setTurn("x");
       setTurnNo((turnNo) => turnNo + 1);
     }
-
     setCells(squares);
     checkForWinner(squares);
+  }
+
+  function handleClick(num: any) {
+    if (player === "human") {
+      makeMove(num);
+    }
   }
 
   function handleRestart() {
